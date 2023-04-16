@@ -3,6 +3,16 @@ var Graph = require('graphology');
 
 var router = express.Router();
 
+router.get('/', function(req, res, next) {
+  res.render('graph');
+});
+
+
+// router.post('/', function(req, res, next) {
+//   res.render('graph');
+// });
+
+
 router.post('/solve', function(req, res, next) {
   /*
     res.body = {

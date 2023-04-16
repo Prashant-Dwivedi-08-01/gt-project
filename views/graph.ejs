@@ -1,0 +1,59 @@
+<head>
+    <style> body { margin: 0; } </style>
+  
+    <script src="//unpkg.com/force-graph"></script>
+    <!--<script src="../../dist/force-graph.js"></script>-->
+  </head>
+  
+  <body>
+      <h1>
+          Hello
+      </h1>
+    <div id="graph"></div>
+  
+    <script>
+      // Random tree
+      const N = 300;
+      const gData = {
+      //   nodes: [...Array(N).keys()].map(i => ({ id: i })),
+        nodes: [
+          {
+              id: 1,
+              name: "One"
+          },
+          {
+              id: 2,
+              name: "Two"
+          },
+          {
+              id: 3,
+              name: "Three"
+          },
+          {
+              id: 4,
+              name: "Four"
+          },
+        ],
+        links: [
+          {
+              source: 1,
+              target: 2
+          },
+          {
+              source: 1,
+              target: 3
+          },
+          {
+              source: 3,
+              target: 4
+          },
+        ]
+      };
+  
+      const Graph = ForceGraph()
+        (document.getElementById('graph'))
+          .linkDirectionalParticles(2)
+          .graphData(gData)
+            .nodeLabel('name')
+    </script>
+  </body>
