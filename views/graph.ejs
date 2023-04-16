@@ -1,59 +1,136 @@
 <head>
-    <style> body { margin: 0; } </style>
-  
+
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
+
     <script src="//unpkg.com/force-graph"></script>
     <!--<script src="../../dist/force-graph.js"></script>-->
-  </head>
-  
-  <body>
-      <h1>
-          Hello
-      </h1>
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        <!-- JS & CSS library of MultiSelect plugin -->
+        <script src="multiselect/jquery.multiselect.js"></script>
+        <link rel="stylesheet" href="multiselect/jquery.multiselect.css">
+
+</head>
+
+<body>
+    <h1>
+        Hello
+    </h1>
+
+    <form id="nodes">
+        <input type="number" name="nodes" placeholder="Number of people" id="n_nodes">
+        <button>Submit</button>
+    </form>
+
+    <form id="person-interrogation">
+        <div id="input-canvas">
+
+        </div>
+        <button>Submit</button>
+    </form>
+
     <div id="graph"></div>
-  
+
     <script>
-      // Random tree
-      const N = 300;
-      const gData = {
-      //   nodes: [...Array(N).keys()].map(i => ({ id: i })),
-        nodes: [
-          {
-              id: 1,
-              name: "One"
-          },
-          {
-              id: 2,
-              name: "Two"
-          },
-          {
-              id: 3,
-              name: "Three"
-          },
-          {
-              id: 4,
-              name: "Four"
-          },
-        ],
-        links: [
-          {
-              source: 1,
-              target: 2
-          },
-          {
-              source: 1,
-              target: 3
-          },
-          {
-              source: 3,
-              target: 4
-          },
-        ]
-      };
-  
-      const Graph = ForceGraph()
-        (document.getElementById('graph'))
-          .linkDirectionalParticles(2)
-          .graphData(gData)
+
+        document.getElementById('nodes').addEventListener('submit', function (e) {
+            e.preventDefault();
+            console.log('submitted');
+            let n = document.getElementById('n_nodes').value
+            let input_canvas = document.getElementById('input-canvas');
+            for (let i = 0; i < n; i++) {
+                let wrapper = document.createElement('div');
+                wrapper.className = 'person';
+                let text = document.createElement('p');
+                text.innerHTML = 'Person ' + i;
+
+                let select = document.createElement('select');
+                select.name = 'person' + i;
+                select.setAttribute("multiple", "true")
+                select.className = 'multiselect';
+                select.id = 'person' + i;
+                for (let j = 0; j < n; j++) {
+                    if (j == i) continue;
+                    let option = document.createElement('option');
+                    option.value = j;
+                    option.innerHTML = 'Person ' + j;
+                    select.appendChild(option);
+                }
+                wrapper.appendChild(text);
+                wrapper.appendChild(select);
+                input_canvas.appendChild(wrapper);
+            }
+        });
+
+
+        let person_interrogation = document.getElementById('person-interrogation');
+        person_interrogation.addEventListener('submit', function (e) {
+            e.preventDefault();
+            console.log('submitted');
+            let n = document.getElementById('n_nodes').value
+            let input_canvas = document.getElementById('input-canvas');
+            let people = [];
+            for (let i = 0; i < n; i++) {
+                let person = document.getElementById('person' + i);
+                console.log(person);
+                let person_name = person.options[person.selectedIndex].text;
+                let person_id = person.options[person.selectedIndex].value;
+                let person_obj = {
+                    name: person_name,
+                    id: person_id
+                }
+                people.push(person_obj);
+            }
+            console.log(people);
+        });
+
+        // Random tree
+        const gData = {
+            //   nodes: [...Array(N).keys()].map(i => ({ id: i })),
+            nodes: [
+                {
+                    id: 1,
+                    name: "One"
+                },
+                {
+                    id: 2,
+                    name: "Two"
+                },
+                {
+                    id: 3,
+                    name: "Three"
+                },
+                {
+                    id: 4,
+                    name: "Four"
+                },
+            ],
+            links: [
+                {
+                    source: 1,
+                    target: 2
+                },
+                {
+                    source: 1,
+                    target: 3
+                },
+                {
+                    source: 3,
+                    target: 4
+                },
+            ]
+        };
+
+        const Graph = ForceGraph()
+            (document.getElementById('graph'))
+            .linkDirectionalParticles(2)
+            .graphData(gData)
             .nodeLabel('name')
     </script>
-  </body>
+</body>
