@@ -44,16 +44,18 @@ router.post('/solve', function(req, res, next) {
   }
 
   //Graph Visualization
-  let g = {}
-  graph.forEachNode((node, attr) => {
-    g[node] = graph.neighbors(node);
-  });
+  // let g = {}
+  // graph.forEachNode((node, attr) => {
+  //   g[node] = graph.everyOutNeighbors(node);
+  // });
+  // console.log(g);
 
   // find the nodes with no of edges equal to no_of_people_telling_truth
   let edges_entering_each_nodes = {};
   graph.forEachNode((node, attr) => {
     edges_entering_each_nodes[node] = graph.inNeighbors(node);
   });
+
 
   let list_of_suspects = [];
   for (var i = 0; i < no_of_nodes; i++) {
@@ -63,7 +65,7 @@ router.post('/solve', function(req, res, next) {
   }
   
   return res.json({
-    "graph": g,
+    // "graph": g,
     "edges_entering_each_nodes": edges_entering_each_nodes,
     "list_of_suspects": list_of_suspects
   });

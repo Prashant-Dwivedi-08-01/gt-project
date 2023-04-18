@@ -4,7 +4,8 @@
         body {
             margin: 0;
         }
-        .force-graph-container > canvas {
+
+        .force-graph-container>canvas {
             border-radius: 8px;
             background-color: transparent;
             border: 1px solid black;
@@ -47,7 +48,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <form id="person-interrogation" style="display: flex; align-items: center; flex-direction: column;">
+                <form id="create-graph-form" style="display: flex; align-items: center; flex-direction: column;">
                     <!-- <input type="number" name="nodes" placeholder="Number of people" id="n_nodes"> -->
                     <div id="input-canvas"
                         style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">
@@ -83,8 +84,14 @@
         </div>
     </div>
 
+    <div class="container" id="graph-section" style="display: none; justify-content: space-around; margin-top: 25px">
+        <div id="graph">
+        </div>
 
-    <div id="graph" style="display: flex; justify-content: center; border-radius: 8px;"></div>
+        <div class="know-culprit mx-auto my-auto" id="result-section">
+            <h5 class="mb-5">Potential Culprits</h5>
+        </div>
+    </div>
 
 
     <!-- Footer -->
@@ -140,7 +147,7 @@
                     </div>
                     <!-- Grid column -->
 
-                  
+
                     <!-- Grid column -->
                     <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
                         <!-- Links -->
@@ -148,8 +155,8 @@
                         <p><i class="fas fa-home me-3"></i>prashantdwivedi194@gmail.com</p>
                         <p><i class="fas fa-home me-3"></i>dimple@gmail.com</p>
                         <p><i class="fas fa-home me-3"></i>ajay@gmail.com</p>
-                       
-                        
+
+
                     </div>
                     <!-- Grid column -->
                 </div>
@@ -246,25 +253,28 @@
         });
 
 
-        let person_interrogation = document.getElementById('person-interrogation');
+        let person_interrogation = document.getElementById('create-graph-form');
         person_interrogation.addEventListener('submit', function (e) {
+            let graph_section = document.getElementById('graph-section');
+            graph_section.style.display = 'flex';
+
             e.preventDefault();
             let n = document.getElementById('n_nodes').value
             let input_canvas = document.getElementById('input-canvas');
             let interrogation_result = {}
 
             for (let i = 1; i <= n; i++) {
-                interrogation_result['suspect' + i] = [];
+                interrogation_result['Suspect ' + i] = [];
                 for (let j = 1; j <= n; j++) {
                     if (j == i) continue;
                     let checkbox = document.getElementById('suspect' + i + '-suspect' + j);
                     if (checkbox.checked) {
-                        interrogation_result['suspect' + i].push(j);
+                        interrogation_result['Suspect ' + i].push('Suspect ' + j);
                     }
                 }
             }
 
-            console.log(interrogation_result);
+            // console.log(interrogation_result);
 
             // for (let i = 1; i <= n; i++) {
             //     let person_select = document.getElementById('suspect' + i);
@@ -281,64 +291,23 @@
             for (let i = 1; i <= n; i++) {
                 // nodes
                 gData_1.nodes.push({
-                    id: i,
+                    id: 'Suspect ' + i,
                     name: 'Suspect ' + i,
                     group: i
                 })
 
                 // links of a node 
                 // IMPORTANT: the source and target must be the index of the nodes array and thus j=0 is the first node
-                for (let j = 0; j < interrogation_result['suspect' + i].length; j++) {
+                for (let j = 0; j < interrogation_result['Suspect ' + i].length; j++) {
                     gData_1.links.push({
-                        source: i,
-                        target: interrogation_result['suspect' + i][j],
+                        source: 'Suspect ' + i,
+                        target: interrogation_result['Suspect ' + i][j],
                         value: i
                     })
                 }
             }
 
-            console.log(gData_1);
-
-            // console.log(gData_1);
-
-            // Random tree
-            // const gData = {
-            //     //   nodes: [...Array(N).keys()].map(i => ({ id: i })),
-            //     nodes: [
-            //         {
-            //             id: 1,
-            //             name: "One"
-            //         },
-            //         {
-            //             id: 2,
-            //             name: "Two"
-            //         },
-            //         {
-            //             id: 3,
-            //             name: "Three"
-            //         },
-            //         {
-            //             id: 4,
-            //             name: "Four"
-            //         },
-            //     ],
-            //     links: [
-            //         {
-            //             source: 1,
-            //             target: 2
-            //         },
-            //         {
-            //             source: 1,
-            //             target: 3
-            //         },
-            //         {
-            //             source: 3,
-            //             target: 4
-            //         },
-            //     ]
-            // };
-
-            const Graph = ForceGraph()
+            const Frontend_Graph = ForceGraph()
                 (document.getElementById('graph'))
                 .graphData(gData_1)
                 .nodeLabel('name')
@@ -349,7 +318,7 @@
                 .nodeId('id')
                 .nodeAutoColorBy('group')
                 .nodeCanvasObject((node, ctx, globalScale) => {
-                    const label = 'Suspect' + node.id;
+                    const label = node.id;
                     // const fontSize = 10;
                     const fontSize = 12 / globalScale;
                     ctx.font = `${fontSize}px Sans-Serif`;
@@ -372,10 +341,55 @@
                     bckgDimensions && ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
                 });
 
-            Graph.d3Force('center', null);
+            Frontend_Graph.d3Force('center', null);
 
             // fit to canvas when engine stops
-            Graph.onEngineStop(() => Graph.zoomToFit(400));
+            Frontend_Graph.onEngineStop(() => Frontend_Graph.zoomToFit(400));
+            
+            let nodes = []
+            for (let i = 1; i <= n; i++) {
+                nodes.push('Suspect ' + i);
+            }
+
+
+            let body = {
+                no_of_nodes: parseInt(n),
+                nodes: nodes,
+                no_of_people_telling_truth: 2
+            }
+
+            Object.keys(interrogation_result).map((node) => {
+                body[node] = interrogation_result[node]
+            })
+
+            console.log(body);
+
+            fetch("/solve", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    var culprits = data["list_of_suspects"];
+                    let result_section = document.getElementById("result-section")
+                    
+                    let ul = document.createElement("ul")
+                    ul.className = "list-group";
+
+                    for(let i = 0; i<culprits.length; i++){
+                        let li = document.createElement("li");
+                        li.className = "list-group-item";
+                        li.innerHTML = culprits[i]
+                        ul.appendChild(li)
+                    }
+
+                    result_section.appendChild(ul)
+                    
+                })
         });
 
 
