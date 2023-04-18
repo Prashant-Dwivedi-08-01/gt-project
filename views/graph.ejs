@@ -4,6 +4,11 @@
         body {
             margin: 0;
         }
+        .force-graph-container > canvas {
+            border-radius: 8px;
+            background-color: transparent;
+            border: 1px solid black;
+        }
     </style>
 
     <script src="//unpkg.com/force-graph"></script>
@@ -44,21 +49,35 @@
             <div class="col-12">
                 <form id="person-interrogation" style="display: flex; align-items: center; flex-direction: column;">
                     <!-- <input type="number" name="nodes" placeholder="Number of people" id="n_nodes"> -->
-                    <div id="input-canvas" style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">
-                        
-                        <!-- <div class="mb-3 mx-2">
-                            <label for="exampleInputEmail1" class="form-label">Suspect 1</label>
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>-->
+                    <div id="input-canvas"
+                        style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">
+
+                        <!-- <div class="mb-3 mx-2" id="interrogation-1">
+                            <h5>Suspect 1</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                  Default checkbox
+                                </label>
+                              </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                  Default checkbox
+                                </label>
+                              </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                  Default checkbox
+                                </label>
+                              </div>
+                        </div> -->
 
                     </div>
 
-                    <button type="submit" class="btn btn-primary" id="create-graph-btn" style="display:none">Create Graph</button>
+                    <button type="submit" class="btn btn-primary" id="create-graph-btn"
+                        style="display:none; width: 15%;">Create Graph</button>
                 </form>
             </div>
         </div>
@@ -67,49 +86,162 @@
 
     <div id="graph" style="display: flex; justify-content: center; border-radius: 8px;"></div>
 
+
+    <!-- Footer -->
+    <footer class="text-center text-lg-start bg-light text-muted mt-5">
+        <!-- Section: Social media -->
+        <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+            <!-- Left -->
+            <div class="me-5 d-none d-lg-block">
+                <span>Let's find the culprit!</span>
+            </div>
+            <!-- Left -->
+
+            <!-- Right -->
+            <div>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-google"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+            <!-- Right -->
+        </section>
+        <!-- Section: Social media -->
+
+        <!-- Section: Links  -->
+        <section class="">
+            <div class="container text-center text-md-start mt-5">
+                <!-- Grid row -->
+                <div class="row mt-3">
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                        <!-- Content -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            <i class="fas fa-gem me-3"></i>Crime Scene
+                        </h6>
+                        <p>
+                            Here we take interrogation inputs and then use graph theory to solve the case and
+                            find the culprit.
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+
+                  
+                    <!-- Grid column -->
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                        <p><i class="fas fa-home me-3"></i>prashantdwivedi194@gmail.com</p>
+                        <p><i class="fas fa-home me-3"></i>dimple@gmail.com</p>
+                        <p><i class="fas fa-home me-3"></i>ajay@gmail.com</p>
+                       
+                        
+                    </div>
+                    <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+
+        <!-- Copyright -->
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+            © 2023 Copyright:
+            <a class="text-reset fw-bold" href="https://mdbootstrap.com/">crime-scene.com</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
     <script>
 
         document.getElementById('nodes').addEventListener('submit', function (e) {
             e.preventDefault();
-            console.log('submitted');
             let n = document.getElementById('n_nodes').value
             let input_canvas = document.getElementById('input-canvas');
+            input_canvas.innerHTML = '';
             for (let i = 1; i <= n; i++) {
 
                 let wrapper = document.createElement('div');
-                wrapper.className = 'mb-3 mx-2';
+                wrapper.className = 'mb-3 mx-5';
+                wrapper.id = 'interrogation' + i;
 
-                let label = document.createElement('label');
-                label.for = 'Suspect' + i;
-                label.innerHTML = 'Suspect ' + i;
-                label.className = 'form-label';
-
-                let select = document.createElement('select');
-                select.className = 'form-select';
-                select.name = 'person' + i;
-                select.setAttribute("multiple", "multiple")
-                select.setAttribute("aria-label", "Default select example")
-                select.id = 'suspect' + i;
-
-                let option = document.createElement('option');
-                option.setAttribute("selected", "selected");
-                option.innerHTML = 'Who are telling the truth?';
-                select.appendChild(option);
+                let h5 = document.createElement('h5');
+                h5.innerHTML = 'Suspect ' + i;
+                wrapper.appendChild(h5);
 
                 for (let j = 1; j <= n; j++) {
                     if (j == i) continue;
-                    let option = document.createElement('option');
-                    option.value = j;
-                    option.innerHTML = 'Suspect ' + j;
-                    select.appendChild(option);
+                    let form_check = document.createElement('div');
+                    form_check.className = 'form-check';
+
+                    let input = document.createElement('input');
+                    input.className = 'form-check-input';
+                    input.type = 'checkbox';
+                    input.id = 'suspect' + i + '-suspect' + j;
+
+                    let label = document.createElement('label');
+                    label.for = 'suspect' + i + '-suspect' + j;
+                    label.innerHTML = 'Suspect ' + j;
+                    label.className = 'form-check-label';
+
+                    form_check.appendChild(input);
+                    form_check.appendChild(label);
+                    wrapper.appendChild(form_check);
                 }
 
-                wrapper.appendChild(label);
-                wrapper.appendChild(select);
+                // let form_check = document.createElement('div');
+                // form_check.className = 'form-check';
+
+                // let input = document.createElement('input');
+                // input.className = 'form-check-input';
+                // input.type = 'checkbox';
+
+
+                // let label = document.createElement('label');
+                // label.for = 'Suspect' + i;
+                // label.innerHTML = 'Suspect ' + i;
+                // label.className = 'form-label';
+
+                // let select = document.createElement('select');
+                // select.className = 'form-select';
+                // select.name = 'person' + i;
+                // select.setAttribute("multiple", "multiple")
+                // select.setAttribute("aria-label", "Default select example")
+                // select.id = 'suspect' + i;
+
+                // let option = document.createElement('option');
+                // option.setAttribute("selected", "selected");
+                // option.innerHTML = 'Who are telling the truth?';
+                // select.appendChild(option);
+
+                // for (let j = 1; j <= n; j++) {
+                //     if (j == i) continue;
+                //     let option = document.createElement('option');
+                //     option.value = j;
+                //     option.innerHTML = 'Suspect ' + j;
+                //     select.appendChild(option);
+                // }
+
+                // wrapper.appendChild(label);
+                // wrapper.appendChild(select);
                 input_canvas.appendChild(wrapper);
 
                 document.getElementById('create-graph-btn').style.display = 'block';
-                
+
             }
         });
 
@@ -122,10 +254,23 @@
             let interrogation_result = {}
 
             for (let i = 1; i <= n; i++) {
-                let person_select = document.getElementById('suspect' + i);
-                let selected_options = $(person_select).val();
-                interrogation_result['suspect' + i] = selected_options;
+                interrogation_result['suspect' + i] = [];
+                for (let j = 1; j <= n; j++) {
+                    if (j == i) continue;
+                    let checkbox = document.getElementById('suspect' + i + '-suspect' + j);
+                    if (checkbox.checked) {
+                        interrogation_result['suspect' + i].push(j);
+                    }
+                }
             }
+
+            console.log(interrogation_result);
+
+            // for (let i = 1; i <= n; i++) {
+            //     let person_select = document.getElementById('suspect' + i);
+            //     let selected_options = $(person_select).val();
+            //     interrogation_result['suspect' + i] = selected_options;
+            // }
 
 
             const gData_1 = {
@@ -134,23 +279,27 @@
             }
 
             for (let i = 1; i <= n; i++) {
-
                 // nodes
                 gData_1.nodes.push({
                     id: i,
-                    name: 'Suspect ' + i
+                    name: 'Suspect ' + i,
+                    group: i
                 })
 
-                // links of a node
-                for (let j = 1; j <= interrogation_result['suspect' + i].length; j++) {
+                // links of a node 
+                // IMPORTANT: the source and target must be the index of the nodes array and thus j=0 is the first node
+                for (let j = 0; j < interrogation_result['suspect' + i].length; j++) {
                     gData_1.links.push({
                         source: i,
-                        target: parseInt(interrogation_result['suspect' + i][j])
+                        target: interrogation_result['suspect' + i][j],
+                        value: i
                     })
                 }
             }
 
             console.log(gData_1);
+
+            // console.log(gData_1);
 
             // Random tree
             // const gData = {
@@ -191,12 +340,42 @@
 
             const Graph = ForceGraph()
                 (document.getElementById('graph'))
-                .linkDirectionalParticles(2)
                 .graphData(gData_1)
                 .nodeLabel('name')
                 .width(500)
                 .height(500)
-                .backgroundColor("#cbcbcb");
+                .linkDirectionalArrowLength(6)
+                .linkWidth(3)
+                .nodeId('id')
+                .nodeAutoColorBy('group')
+                .nodeCanvasObject((node, ctx, globalScale) => {
+                    const label = 'Suspect' + node.id;
+                    // const fontSize = 10;
+                    const fontSize = 12 / globalScale;
+                    ctx.font = `${fontSize}px Sans-Serif`;
+                    const textWidth = ctx.measureText(label).width;
+                    const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2); // some padding
+
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
+
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = node.color;
+                    ctx.fillText(label, node.x, node.y);
+
+                    node.__bckgDimensions = bckgDimensions; // to re-use in nodePointerAreaPaint
+                })
+                .nodePointerAreaPaint((node, color, ctx) => {
+                    ctx.fillStyle = color;
+                    const bckgDimensions = node.__bckgDimensions;
+                    bckgDimensions && ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
+                });
+
+            Graph.d3Force('center', null);
+
+            // fit to canvas when engine stops
+            Graph.onEngineStop(() => Graph.zoomToFit(400));
         });
 
 
